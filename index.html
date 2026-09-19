@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omex® Packaged Drinking Water</title>
+    <style>
+        :root {
+            --primary-blue: #0A74DA;
+            --dark-blue: #054A91;
+            --dark-black: #000000;
+            --deep-navy: #0B2545;
+            --light-bg: #EEF4F8;
+            --card-bg: #FFFFFF;
+            --accent-cyan: #E0F2FE;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgb(38, 34, 98);
+            color: var(--deep-navy);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .splash-image {
+            width: 20.5rem;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .brand-text {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--dark-blue);
+            letter-spacing: 1px;
+        }
+
+        .brand-subtitle {
+            font-size: 0.95rem;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .loader-bar {
+            width: 150px;
+            height: 10px;
+            background-color: #E2E8F0;
+            margin-top: 45px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .loader-fill {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue), var(--dark-blue));
+            animation: loading 5s linear forwards;
+        }
+
+        @keyframes loading {
+            0% {
+                width: 0%;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.04);
+            }
+        }
+
+        #main-content {
+            display: none;
+            width: 100%;
+            max-width: 430px;
+            background: var(--card-bg);
+            padding: 35px 30px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(11, 37, 69, 0.08);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .product-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .product-title {
+            color: var(--deep-navy);
+            font-size: 2.2rem;
+            font-weight: 800;
+        }
+
+        .product-tag {
+            font-size: 0.85rem;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        /* Enhanced Specification Cards */
+        .info-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: linear-gradient(180deg, #FFFFFF 0%, var(--accent-cyan) 100%);
+            border: 2px solid #010101;
+            padding: 16px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(10, 116, 218, 0.04);
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            ;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--dark-black);
+        }
+
+        /* INTERACTIVE SEARCH SECTOR */
+        .search-box {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #000000;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 500;
+            outline: none;
+            background-color: #F8FAFC;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-blue);
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 4px rgba(10, 116, 218, 0.1);
+        }
+
+        /* BRANDED DYNAMIC PLANT PANEL */
+        .result-panel {
+            display: none;
+            background: linear-gradient(145deg, var(--deep-navy) 0%, #1E3A8A 100%);
+            color: #FFFFFF;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(11, 37, 69, 0.25);
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .panel-heading {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #93C5FD;
+            margin-bottom: 15px;
+            font-weight: 800;
+            border-bottom: 1px solid rgba(147, 197, 253, 0.2);
+            padding-bottom: 8px;
+        }
+
+        .address-text {
+            line-height: 1.7;
+            font-size: 0.95rem;
+            color: #E2E8F0;
+            font-weight: 400;
+        }
+
+        .address-text strong {
+            color: #FFFFFF;
+            font-size: 1.7rem;
+        }
+
+
+        .fssai-badge p {
+            margin: 0;
+            display: inline;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 45px 12px 12px;
+            /* extra space on right */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            /* moved to right */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .search-icon:hover {
+            color: #007bff;
+        }
+
+
+        .result-panel {
+            display: none;
+            background: linear-gradient(145deg, var(--deep-navy) 0%, #1E3A8A 100%);
+            color: #FFFFFF;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(11, 37, 69, 0.25);
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+            text-align: center;
+            /* Center all text */
+        }
+
+        #address {
+            line-height: 1.7rem;
+        }
+
+        .panel-heading {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #93C5FD;
+            margin-bottom: 0px;
+            font-weight: 800;
+            padding-bottom: 8px;
+            text-align: center;
+            border-bottom: 1px solid rgba(147, 197, 253, 0.2);
+        }
+
+        .address-text {
+            line-height: 1.7;
+            font-size: 0.95rem;
+            color: #E2E8F0;
+            text-align: center;
+        }
+
+        .fssai-badge {
+            margin: 15px auto 0;
+            display: block;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            color: #000000;
+            padding: 3px 1px;
+            border-radius: 14px;
+            font-size: 1.3rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="splash-screen">
+        <div class="logo-container">
+            <img class="splash-image" src="pwd.svg" alt="Omex Logo" onerror="this.style.display='none';">
+        </div>
+        <div class="loader-bar">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <div class="product-header">
+            <div class="logo-container">
+                <img class="splash-image" src="pwd.svg" alt="Omex Logo" onerror="this.style.display='none';">
+            </div>
+        </div>
+
+        <div class="main-wrapper">
+
+            <div class="info-container">
+                <div class="info-card">
+                    <div class="info-label">Quantity</div>
+                    <div class="info-value">1000 ML</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Retail Price</div>
+                    <div class="info-value">Rs. 14/- <br>
+                        <div class="info-label">Per 01 Litre</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <svg class="search-icon" id="searchIcon" viewBox="0 0 24 24" fill="none" onclick="searchCode()"
+                    style="cursor: pointer;">
+                    <path
+                        d="M21 21L15.8 15.8M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z"
+                        stroke="currentColor" stroke-width="4" stroke-linecap="round" />
+                </svg>
+                <input type="text" id="batchSearch" class="search-input" placeholder="Type Batch No. (e.g., OX22)..."
+                    maxlength="2">
+            </div>
+
+            <p style="text-align: center; color: black; font-size: 16px; font-weight: 600;">Enter First two characters
+                of Batch no. in the search bar & search</p>
+        </div>
+
+        <div id="plantDetails" class="result-panel">
+            <div class="panel-heading">Manufactured By</div>
+            <p class="address-text">
+                <strong id="firmName"></strong>
+            <div id="address"></div>
+            <div class="fssai-badge">
+            <div style="font-size: 0.85rem;">FSSAI No.</div> <p id="fssai" style="font-weight: 900; letter-spacing: 3px;"> </p>
+            </div>
+        </div>
+        </p>
+    </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                const main = document.getElementById('main-content');
+                splash.style.opacity = '0';
+                splash.style.visibility = 'hidden';
+                main.style.display = 'block';
+            }, 5000);
+        });
+
+        const searchIcon = document.getElementById('searchIcon').addEventListener('click', searchCode);
+
+        function searchCode() {
+            console.log("Input triggerd")
+            const firms = {
+                KT: {
+                    firmName: "Premium Beverages",
+                    address: `Plot no.27-28, <br> Main Road,<br> Awaam Nagar,<br> <strong>ITARSI</strong> 461111 <br> Dist. Narmadapuram (MP)`,
+                    fssai: "11419110000072"
+                },
+                WC: {
+                    firmName: "Parshavnath Chilled Water",
+                    address: "Khoda Ganesh Road,<br> Dhani Purohitan, <br> Madanganj, <br> <strong>KISHANGARH</strong> 305801 <br>Dist. Ajmer (RJ)",
+                    fssai: "12214009000860"
+                },
+                XT: {
+                    firmName: "Ganga Narmada Mineral Water",
+                    address: "Rathi Industrial Area,<br> Bikaner Road,<br><strong>NOKHA</strong> 334001 <br> Dist. Bikaner (RJ)",
+                    fssai: "12214017000100"
+                },
+                YD: {
+                    firmName: "Vishwas Udyog LLP",
+                    address: "Village <strong>NAURANGBAS RAJPUTANA </strong>,<br> Charkhi <br> Dadri 127310 (HR)",
+                    fssai: "10822022000024"
+                },
+                CY: {
+                    firmName: "07 Sea Beverages",
+                    address: "Village <strong>KESUPURA</strong>, <br> Tehsil Ellenabad, 125055<br> Dist. Sirsa (HR)",
+                    fssai: "10822019000112"
+                },
+                XN: {
+                    firmName: "Shri Krishna Beverages",
+                    address: "D-30, Site A,<br> Industrial Area,<br><strong>MATHURA</strong> 281001 <br>Dist. Mathura (UP)",
+                    fssai: "12714004000016"
+                },
+                FQ: {
+                    firmName: "Maa Vaishno Food & Beverages",
+                    address: "Barah Road,<br> Near Sarkari Godown,<br><strong>LAHAR</strong> 477445 <br> Dist. Bhind (MP)",
+                    fssai: "21423670000944"
+                },
+                ZA: {
+                    firmName: "Shri Balaji Beverages",
+                    address: "108, Main Road,<br> Pali Pahari, <br> Daily Raksa,<br><strong>JHANSI</strong> 284419 <br> Dist. Jhansi (UP)",
+                    fssai: "12723013000089"
+                },
+                PJ: {
+                    firmName: "Qooz Industries OPC Pvt. Ltd.",
+                    address: "F-84,85,86,<br> UPSIDC Industrial Area,<br> Malwan, <br><strong>FATEHPUR</strong> 212664 <br>Dist. Fatehpur (UP)",
+                    fssai: "12724007000098"
+                },
+                QN: {
+                    firmName: "Maera Food & Beverages",
+                    address: "G1 514, <br>RIICO Growth Center, <br><strong>DHOLPUR</strong> 328001 <br>Dist. Dholpur (RJ)",
+                    fssai: "12226243000013"
+                },
+                LB: {
+                    firmName: "Gaurav Food & Beverages",
+                    address: "Near Krishna Tent House,<br> Sadbhavna Nagar,<br>Makroniya,<br><strong> SAGAR </strong> 470004 (MP)",
+                    fssai: "11420470000014"
+                },
+                SJ: {
+                    firmName: "Swariya Food and Beverages",
+                    address: "Opposite Petrol Pump,<br> Durgapuri Colony,<br> <strong>CHHABRA</strong> 325220 <br>Dist. Baran (RJ)",
+                    fssai: "22225034000481"
+                },
+                NX: {
+                    firmName: "Ayush Chilled Water",
+                    address: "522/9,<br> Village <strong>POKHARNI</strong> 461441 <br>Dist. Harda (MP)",
+                    fssai: "11424130000008"
+                },
+                OZ: {
+                    firmName: "Nitya Beverages",
+                    address: "57/4/2, Dedhwara, <br><strong>NARSINGHPUR</strong> 487001 <br>Dist. Narsinghpur (MP)",
+                    fssai: "11419290000094"
+                }
+            };
+
+            const searchInput = document.getElementById('batchSearch');
+            const resultPanel = document.getElementById('plantDetails');
+            const infoContainer = document.getElementsByClassName('main-wrapper');
+            const queryValue = searchInput.value.toUpperCase().trim();
+            if (queryValue.length >= 2) {
+                const firm = firms[queryValue];
+                if (firm) {
+                    document.getElementById("firmName").innerHTML = firm.firmName;
+                    document.getElementById("address").innerHTML = firm.address;
+                    document.getElementById("fssai").innerHTML = firm.fssai;
+                    infoContainer.item(0).style.display = 'none';
+                    resultPanel.style.display = 'block';
+
+                } else {
+                    resultPanel.style.display = 'none';
+                }
+            } else {
+                resultPanel.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>
