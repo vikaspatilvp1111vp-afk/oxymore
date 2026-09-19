@@ -7,10 +7,10 @@
     <title>Sahyadri's Oxymore® Aqua</title>
     <style>
         :root {
-            --primary-blue: #007871;
+            --primary: #007871;
             --dark-blue: #054A91;
             --dark-black: #000000;
-            --deep-navy: #0B2545;
+            --deep-navy: #084743;
             --light-bg: #EEF4F8;
             --card-bg: #FFFFFF;
             --accent-cyan: #E0F2FE;
@@ -90,7 +90,7 @@
         .loader-fill {
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, var(--primary-blue), var(--dark-blue));
+            background: linear-gradient(90deg, var(--primary), var(--dark-blue));
             animation: loading 5s linear forwards;
         }
 
@@ -140,7 +140,7 @@
 
         .product-tag {
             font-size: 0.85rem;
-            color: var(--primary-blue);
+            color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: 700;
@@ -199,7 +199,7 @@
         }
 
         .search-input:focus {
-            border-color: var(--primary-blue);
+            border-color: var(--primary);
             background-color: #FFFFFF;
             box-shadow: 0 0 0 4px rgba(10, 116, 218, 0.1);
         }
@@ -310,7 +310,7 @@
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            color: #93C5FD;
+            color: #fcfdfe;
             margin-bottom: 0px;
             font-weight: 800;
             padding-bottom: 8px;
@@ -421,11 +421,6 @@
                     address: `Plot no.27-28, <br> Main Road,<br> Awaam Nagar,<br> <strong>ITARSI</strong> 461111 <br> Dist. Narmadapuram (MP)`,
                     fssai: "11419110000072"
                 },
-                WC: {
-                    firmName: "Parshavnath Chilled Water",
-                    address: "Khoda Ganesh Road,<br> Dhani Purohitan, <br> Madanganj, <br> <strong>KISHANGARH</strong> 305801 <br>Dist. Ajmer (RJ)",
-                    fssai: "12214009000860"
-                }
             };
 
             const searchInput = document.getElementById('batchSearch');
